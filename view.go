@@ -5,32 +5,27 @@ import (
 	"strings"
 	"fmt"
 	"strconv"
-	"time"
 )
 
 type View struct {
 	f *stfl.Form
 	quit bool
 	lines uint
+	linequeue chan LineMsg
+	info ServerInfo
 }
 
-func CreateView() (v *View) {
+func CreateView(linequeue chan LineMsg, info ServerInfo) (v *View) {
 	v = new(View)
 	v.f = stfl.Create("<screen.stfl>")
 	v.quit = false
 	v.lines = 0
+	v.linequeue = linequeue
+	v.info = info
 	return
 }
 
 func(v *View) Run() {
-
-	go func() {
-		for {
-			time.Sleep(1000000000)
-			v.sendLine(time.LocalTime().String())
-			v.UpdateScreen()
-		}
-	}()
 
 	for !v.quit {
 		key := v.f.Run(0)
@@ -53,24 +48,22 @@ func(v *View) Run() {
 }
 
 func(v *View) handleInput(line string) {
+	WriteLine("ii-data/" + v.info.Server + "/in", line)
 	if line[0] == '/' {
 		elements := strings.Split(line[1:], " ", -1)
 		v.execCmd(elements[0], elements[1:])
-	} else {
-		v.sendLine(line)
 	}
 }
+
 
 func(v *View) execCmd(cmd string, args []string) {
 	switch cmd {
 	case "quit":
 		v.quit = true
-	default:
-		v.showError(fmt.Sprintf("unknown command '%s'", cmd))
 	}
 }
 
-func(v *View) sendLine(line string) {
+func(v *View) AddLine(line string) {
 	v.f.Modify("mainlist", "append_inner", fmt.Sprintf("{list {listitem text:%s}}", stfl.Quote(line)))
 	v.f.Set("mainlistpos", strconv.Uitoa(v.lines))
 	v.lines++
@@ -78,7 +71,7 @@ func(v *View) sendLine(line string) {
 }
 
 func(v *View) showError(errmsg string) {
-	v.sendLine("Error: " + errmsg)
+	v.AddLine("Error: " + errmsg)
 }
 
 func(v *View) UpdateScreen() {
