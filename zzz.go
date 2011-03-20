@@ -4,12 +4,17 @@ import (
 	"flag"
 	"os"
 	"fmt"
+	"stfl"
 )
 
 type ServerInfo struct {
 	Server string
 	Port int
 	Nick string
+}
+
+func init() {
+	stfl.Init()
 }
 
 func main() {

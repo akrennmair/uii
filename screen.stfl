@@ -4,10 +4,9 @@ vbox
     text:"zzz 0.0"
     .expand:0
     .height:1
-  list
+  list[mainlist]
     .expand:vh
-    pos[listpos]:0
-    listitem text:"foo"
+    pos[mainlistpos]:0
   label 
     text[info]:"some general information about whatever"
     .expand:0
@@ -17,6 +16,6 @@ vbox
       text[prompt]:"Prompt: "
       style_normal:
       .expand:0
-    input
+    input[input]
       .expand:h
-      text[mytext]:""
+      text[inputtext]:""
