@@ -1,0 +1,12 @@
+README for uii
+==============
+
+uii is a user interface for the IRC client ii. It is implemented in the Go
+programming language, and uses STFL as its UI library.
+
+Links
+=====
+ii: http://tools.suckless.org/ii/
+Go: http://golang.org/
+STFL: http://www.clifford.at/stfl/
+go-stfl: https://github.com/akrennmair/go-stfl
