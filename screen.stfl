@@ -1,7 +1,7 @@
 vbox
   @label#style_normal:fg=yellow,bg=blue,attr=bold
   label
-    text:"zzz 0.0"
+    text:"uii 0.0"
     .expand:0
     .height:1
   list[mainlist]

@@ -37,6 +37,6 @@ func main() {
 }
 
 func usage() {
-	fmt.Println("usage: zzz -server <server> [-port <port>] [-nick <nick>]")
+	fmt.Println("usage: uii -server <server> [-port <port>] [-nick <nick>]")
 	os.Exit(1)
 }
