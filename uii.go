@@ -51,9 +51,15 @@ func usage() {
 }
 
 func startii(info ServerInfo, wman *WindowManager) {
-	_, err := exec.Run("/Users/ak/bin/ii", []string{ "ii", "-i", "ii-data", "-s", info.Server, "-p", strconv.Itoa(info.Port), "-n", info.Nick }, []string{ }, ".", exec.DevNull, exec.DevNull, exec.DevNull)
+	ii_path, err := exec.LookPath("ii")
 	if err != nil {
-		fmt.Printf("Running ii failed: %v\n", err)
+		fmt.Println("Error: couldn't find ii.")
+		os.Exit(1)
+	}
+
+	_, err = exec.Run(ii_path, []string{ "ii", "-i", "ii-data", "-s", info.Server, "-p", strconv.Itoa(info.Port), "-n", info.Nick }, []string{ }, ".", exec.DevNull, exec.DevNull, exec.DevNull)
+	if err != nil {
+		fmt.Printf("Running ii failed: %s\n", err)
 		os.Exit(1)
 	}
 
@@ -61,10 +67,16 @@ func startii(info ServerInfo, wman *WindowManager) {
 }
 
 func monitorFile(filename string, ircchan string, wman *WindowManager) {
-	file, err := os.Open(filename, os.O_RDONLY, 0)
+	var file *os.File
 
-	if err != nil {
-		return
+	for {
+		f, err := os.Open(filename, os.O_RDONLY, 0)
+		if err != nil {
+			time.Sleep(1000000000)
+		} else {
+			file = f
+			break
+		}
 	}
 
 	reader := bufio.NewReader(file)
